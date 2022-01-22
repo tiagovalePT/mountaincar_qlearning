@@ -55,7 +55,7 @@ for x = 1:n_states
     if rand(1) < eps
        action = randi([1 3]);
     else
-        action = max(Q);
+        action = max(Q[discretised_state(state)]);
     end
     
     % choose an action at random and set it as the next state

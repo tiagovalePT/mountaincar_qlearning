@@ -1,29 +1,31 @@
-function startsim()
+%function startsim()
+
+clear
+clc
 
 global env agent sim
 
+%%% ELIMINAR DEPOIS
 env.discrete_buckets = 40;
-agent.epsilon = 0.05;
-agent.maxinput = [0.5 0.07]; % 1.5
-agent.mininput = [-1.2 -0.07]; %-1.5
+agent.epsilon = 0.5;
+agent.maxinput = [0.5 1.5];
+agent.mininput = [-1.2 -1.5];
 agent.LEARNING_RATE = 0.1;
 agent.DISCOUNT = 0.95;
 env.reward = -1;
 agent.goal = 0.5;
 env.nr_episodios = 30000;
 env.nr_it = 200;
-
+count_ep = 0;
 env.mass = 0.2;				% mass of car
 env.force = 0.2;			% force of each push
 env.friction = 0.5;			% coefficient of friction
 env.deltaT = 0.1;			% time step for integration
 
 
-count_ep = 0;
+
 %%%
 sim.running = 1;
-
-q = randn(env.discrete_buckets, 3, env.discrete_buckets);
 
 while (sim.running & count_ep < env.nr_episodios)
 
@@ -41,7 +43,8 @@ while (sim.running & count_ep < env.nr_episodios)
     initstate;
         
     % Gerar quality matrixes
-    
+    q = randn(env.discrete_buckets, 3, env.discrete_buckets);
+
     counter = 0;
 
     while (env.r ~= 0 & sim.running & counter < env.nr_it)
@@ -70,10 +73,7 @@ while (sim.running & count_ep < env.nr_episodios)
         if env.new_state(1) >= 0.5
             q(env.new_discrete_state(2)+1, agent.action , env.new_discrete_state(1)+1) = 0;
             env.r = 0;
-            disp('CHEGUEI FDP');
-            disp(counter);
-            disp(env.new_state);
-            disp(count_ep);
+            disp('CHEGUEI FDP')
         else
             % Atualizar o valor de q consoante a nossa ação
             current_q = q(env.new_discrete_state(2)+1, agent.action , env.new_discrete_state(1)+1);
@@ -88,40 +88,12 @@ while (sim.running & count_ep < env.nr_episodios)
         %disp(['RUN ONCE:', env.state]);
         %disp(env.state);
         counter = counter + 1;
-        drawnow;
     end
+
+    count_ep = count_ep + +1;
     
-    count_ep = count_ep + +1;    
-					% end of one trial
-
-  if sim.running,
-    sim.trial = count_ep;
-
-    sim.perf(sim.trial) = counter;
-
-    if agent.displaysurf & rem(sim.trial,agent.displaysurfrate) == 0,
-      a = findobj('Tag','agentsurfaxis');
-      axes(a);
-      plotQ(20);
-      set(a,'Tag','agentsurfaxis');
-    end
-
-    if agent.displayrbfs & rem(sim.trial,agent.displayrbfsrate) == 0,
-      a = findobj('Tag','agentrbfsaxis');
-      axes(a);
-      plotrbfs;
-      set(a,'Tag','agentrbfsaxis');
-    end
-
-    if sim.display & rem(sim.trial,sim.displayrate) == 0,
-      a = findobj('Tag','simperfaxis');
-      axes(a);
-      showperf;
-%      set(a,'Tag','simperfaxis');
-    end
-
-    drawnow;
-    
-  end
-
 end
+
+
+
+%end

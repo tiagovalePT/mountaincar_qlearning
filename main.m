@@ -4,6 +4,7 @@ more off				% so matlab won't freeze when output hits pagefull
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Initialize gui.
+clear;
 initgui;
 
 
@@ -25,7 +26,7 @@ hold off
 %%% New variables
 %env.n_states = 40;
 env.discrete_buckets = 30;
-
+agent.epsilon = 0.01;			% random action probability
 
 
 %%% Define data structures.
@@ -47,7 +48,7 @@ env.deltaT = 0.1;			% time step for integration
 agent.ni = 2;				% number of inputs
 agent.nh = 25;				% number of hidden units
 agent.no = 3;				% number of outputs
-agent.epsilon = 0.01;			% random action probability
+
 agent.sigma = 1;			% width parameter for hidden gaussians
 
 agent.orate = 0.01;			% output learning rate
@@ -60,18 +61,20 @@ agent.displaysurf = 1;
 agent.displaysurfrate = 10;
 agent.displayrbfs = 1;
 agent.displayrbfsrate = 10;
-agent.maxinput = [0.5 1.5];
-agent.mininput = [-1.2 -1.5];
+%agent.maxinput = [0.5 1.5];
+%agent.mininput = [-1.2 -1.5];
+agent.maxinput = [0.5 0.07]; % 1.5
+agent.mininput = [-1.2 -0.07]; %-1.5
 
 % Neural Networks
-agent.wh = [];				% hidden layer weights
-agent.wo = [];				% output layer weights
-agent.x = [];				% input 
-agent.h = [];				% output of hidden layer
-agent.p = [];				% output of output layer
-agent.action = 0;			% output action
-agent.ewh = [];				% hidden layer eligibilities
-agent.ewo = [];				% output layer eligibilities
+% agent.wh = [];				% hidden layer weights
+% agent.wo = [];				% output layer weights
+% agent.x = [];				% input 
+% agent.h = [];				% output of hidden layer
+% agent.p = [];				% output of output layer
+% agent.action = 0;			% output action
+% agent.ewh = [];				% hidden layer eligibilities
+% agent.ewo = [];				% output layer eligibilities
 
 %Methods
 % initagent
@@ -84,7 +87,7 @@ sim.maxtrials = 1000;
 sim.display = 1;
 sim.displayrate = 1;
 
-sim.reset = 0;
+% sim.reset = 0;
 sim.running = 1;
 sim.trial = 0;
 sim.step = 0;				% step within trial

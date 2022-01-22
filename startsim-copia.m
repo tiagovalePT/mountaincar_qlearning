@@ -2,20 +2,6 @@ function startsim()
 
 global env agent sim
 
-def discretised_state(state):
-	DISCRETE_WIN_SIZE = (env.observation_space.high-env.observation_space.low)/[DISCRETE_BUCKETS]*len(env.observation_space.high)
-	discrete_state = (state-env.observation_space.low)//DISCRETE_WIN_SIZE
-	return tuple(discrete_state.astype(np.int))
-
-DISCRETE_WIN_SIZE = (agent.maxinput(1) - agent.mininput(1)) / env.discrete_buckets * size(agent.maxinput,2);
-discrete_state = fix((state - agent.mininput(1)) / DISCRETE_WIN_SIZE);
-
-return 
-
-
-agent.mininput(1)
-agent.maxninput(1)
-
 sim.running = 1;
 
 while sim.running
