@@ -8,8 +8,8 @@ global env agent sim
 %%% ELIMINAR DEPOIS
 env.discrete_buckets = 40;
 agent.epsilon = 0.5;
-agent.maxinput = [0.5 1.5];
-agent.mininput = [-1.2 -1.5];
+agent.maxinput = [0.5 0.05];
+agent.mininput = [-1.2 -0.05];
 agent.LEARNING_RATE = 0.1;
 agent.DISCOUNT = 0.95;
 env.reward = -1;
@@ -29,7 +29,7 @@ sim.running = 1;
 
 while (sim.running & count_ep < env.nr_episodios)
 
-    %sim.trial = sim.trial + 1;
+    sim.trial = sim.trial + 1;
     
     % Inicializar a reward do episódio
     env.episode_reward = 0;
@@ -73,7 +73,8 @@ while (sim.running & count_ep < env.nr_episodios)
         if env.new_state(1) >= 0.5
             q(env.new_discrete_state(2)+1, agent.action , env.new_discrete_state(1)+1) = 0;
             env.r = 0;
-            disp('CHEGUEI FDP')
+            disp('CHEGUEI FDP: ')
+            disp(count_ep)
         else
             % Atualizar o valor de q consoante a nossa ação
             current_q = q(env.new_discrete_state(2)+1, agent.action , env.new_discrete_state(1)+1);

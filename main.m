@@ -63,18 +63,18 @@ agent.displayrbfs = 1;
 agent.displayrbfsrate = 10;
 %agent.maxinput = [0.5 1.5];
 %agent.mininput = [-1.2 -1.5];
-agent.maxinput = [0.5 0.07]; % 1.5
-agent.mininput = [-1.2 -0.07]; %-1.5
+agent.maxinput = [0.5 0.05]; % 1.5
+agent.mininput = [-1.2 -0.05]; %-1.5
 
 % Neural Networks
-% agent.wh = [];				% hidden layer weights
-% agent.wo = [];				% output layer weights
-% agent.x = [];				% input 
-% agent.h = [];				% output of hidden layer
-% agent.p = [];				% output of output layer
-% agent.action = 0;			% output action
-% agent.ewh = [];				% hidden layer eligibilities
-% agent.ewo = [];				% output layer eligibilities
+agent.wh = [];				% hidden layer weights
+agent.wo = [];				% output layer weights
+agent.x = [];				% input 
+agent.h = [];				% output of hidden layer
+agent.p = [];				% output of output layer
+agent.action = 0;			% output action
+agent.ewh = [];				% hidden layer eligibilities
+agent.ewo = [];				% output layer eligibilities
 
 %Methods
 % initagent
