@@ -4,9 +4,9 @@ global env agent sim
 
 %%% ELIMINAR DEPOIS
 env.discrete_buckets = 40;
-agent.epsilon = 0.5;
-agent.maxinput = [0.5 0.05];
-agent.mininput = [-1.2 -0.05];
+agent.epsilon = 0.01;
+agent.maxinput = [0.5 1.5];
+agent.mininput = [-1.2 -1.5];
 agent.LEARNING_RATE = 0.1;
 agent.DISCOUNT = 0.95;
 env.reward = -1;
@@ -19,10 +19,9 @@ env.force = 0.2;			% force of each push
 env.friction = 0.5;			% coefficient of friction
 env.deltaT = 0.1;			% time step for integration
 
-
+sim.running = 1;
 
 %%%
-sim.running = 1;
 
 while (sim.running & count_ep < env.nr_episodios)
 
@@ -43,8 +42,9 @@ while (sim.running & count_ep < env.nr_episodios)
     q = randn(env.discrete_buckets, 3, env.discrete_buckets);
 
     counter = 0;
-
-    while (env.r ~= 0 & sim.running & counter < env.nr_it)
+    
+    %& counter < env.nr_it
+    while (env.r ~= 0 & sim.running)
         sim.step = sim.step + 1;
     
         
@@ -59,7 +59,7 @@ while (sim.running & count_ep < env.nr_episodios)
 
         
         % Próximo estado + descritização do estado
-        env.new_state = nextstate(agent.action);
+        env.new_state = nextstate(agent.action)
         env.new_discrete_state = discretised_state(env.new_state);
         
         % Maximo q do próximo passo
@@ -86,10 +86,38 @@ while (sim.running & count_ep < env.nr_episodios)
         %disp(['RUN ONCE:', env.state]);
         %disp(env.state);
         counter = counter + 1;
+        sim.step = counter;
     end
 
     count_ep = count_ep + +1;
-    
-end
 
+    if sim.running,
+
+        sim.perf(sim.trial) = sim.step;
+    
+        if agent.displaysurf & rem(sim.trial,agent.displaysurfrate) == 0,
+          a = findobj('Tag','agentsurfaxis');
+          axes(a);
+          plotQ(20);
+          set(a,'Tag','agentsurfaxis');
+        end
+    
+        if agent.displayrbfs & rem(sim.trial,agent.displayrbfsrate) == 0,
+          a = findobj('Tag','agentrbfsaxis');
+          axes(a);
+          plotrbfs;
+          set(a,'Tag','agentrbfsaxis');
+        end
+    
+        if sim.display & rem(sim.trial,sim.displayrate) == 0,
+          a = findobj('Tag','simperfaxis');
+          axes(a);
+          showperf;
+        %set(a,'Tag','simperfaxis');
+        end
+    
+        drawnow;
+    
+    end
+    
 end

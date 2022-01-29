@@ -2,6 +2,9 @@ global env agent perf sim
 
 more off				% so matlab won't freeze when output hits pagefull
 
+close all
+clc
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Initialize gui.
 clear;
@@ -63,8 +66,8 @@ agent.displayrbfs = 1;
 agent.displayrbfsrate = 10;
 %agent.maxinput = [0.5 1.5];
 %agent.mininput = [-1.2 -1.5];
-agent.maxinput = [0.5 0.05]; % 1.5
-agent.mininput = [-1.2 -0.05]; %-1.5
+agent.maxinput = [0.5 1.5]; % 1.5
+agent.mininput = [-1.2 -1.5]; %-1.5
 
 % Neural Networks
 agent.wh = [];				% hidden layer weights

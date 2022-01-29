@@ -93,6 +93,8 @@ while (sim.running & count_ep < env.nr_episodios)
 
     count_ep = count_ep + +1;
     
+    
+    
 end
 
 
