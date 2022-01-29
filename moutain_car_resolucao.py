@@ -2,6 +2,7 @@
 import gym
 import numpy as np
 import matplotlib.pyplot as plt
+from sympy import false
 
 
 env = gym.make("MountainCar-v0")
@@ -12,9 +13,9 @@ NMR_EPISODES = 1000
 DISCOUNT = 0.98
 EPISODE_DISPLAY = 500
 LEARNING_RATE = 0.3
-EPSILON = 0.01
-EPSILON_DECREMENTADOR = EPSILON/(NMR_EPISODES//16)
-env._max_episode_steps = 10000
+EPSILON = 0.05
+EPSILON_DECREMENTADOR = EPSILON/(NMR_EPISODES//4)
+env._max_episode_steps = 1000
 
 #Environment values
 print(env.observation_space.high)	#[0.6  1.5]
@@ -38,11 +39,14 @@ def discretizar_estado(estado):
 array_it = list()
 episodes_list = list()
 ep_rewards = []
+ep_list = []
 
+iteration = 0
 # Inicio do algoritmo
 for episode in range(NMR_EPISODES):
 
 	episode_reward = 0
+	done = false
 
 	# estado discretizado
 	estado_discreto_atual = discretizar_estado(env.reset())
@@ -53,7 +57,6 @@ for episode in range(NMR_EPISODES):
 	else:
 		render_state = False
 
-	iteration = 0
 
 	while not done:
 
@@ -73,8 +76,8 @@ for episode in range(NMR_EPISODES):
 		novo_estado_discreto = discretizar_estado(novo_estado)
 
 		# renderização do simulador
-		if render_state:
-			env.render()
+		##if render_state:
+			##env.render()
 
 
 		if not done:
@@ -91,6 +94,7 @@ for episode in range(NMR_EPISODES):
 			# estatisticas para o gráfico
 			array_it.append(iteration)
 			episodes_list.append(episode)
+			iteration = 0
 		
 		# atualização do esatdo discreto, para calcular a ação no inicio da nova iteração
 		estado_discreto_atual = novo_estado_discreto
@@ -100,12 +104,19 @@ for episode in range(NMR_EPISODES):
 	EPSILON = EPSILON - EPSILON_DECREMENTADOR
 
 	ep_rewards.append(episode_reward)
+	ep_list.append(episode)
 
 	if not episode % EPISODE_DISPLAY:
-		avg_reward = sum(ep_rewards[-EPISODE_DISPLAY:])/len(ep_rewards[-EPISODE_DISPLAY:])		
+		avg_reward = sum(ep_rewards[-EPISODE_DISPLAY:])/len(ep_rewards[-EPISODE_DISPLAY:])	
 		print(f"Episode:{episode} avg:{avg_reward} min:{min(ep_rewards[-EPISODE_DISPLAY:])} max:{max(ep_rewards[-EPISODE_DISPLAY:])}")
 
 env.close()
+
+plt.plot(ep_list, ep_rewards) 
+plt.title('Mountain Car Q-Learning')
+plt.ylabel('Average reward/Episode')
+plt.xlabel('Episodes')
+plt.show()
 
 plt.plot(np.array(episodes_list), np.array(array_it))
 plt.title('Learning Trial')
